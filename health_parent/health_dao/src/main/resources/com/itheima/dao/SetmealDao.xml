@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.SetmealDao">
+    <!--新增套餐 -->
+    <insert id="add" parameterType="com.itheima.pojo.Setmeal">
+    /*查询检查组id
+        keyProperty：将查询出来的id设置给CheckGroup对象中id属性
+        order：AFTER 当保存之后发送查询id请求
+    */
+    <selectKey keyProperty="id"  order="AFTER" resultType="int">
+        select LAST_INSERT_ID()
+    </selectKey>
+    insert into t_setmeal(name,code,helpCode,sex,age,price,remark,attention,img)
+    values(#{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
+    </insert>
+
+    <!--保存检查组和检查项中间表-->
+    <insert id="setSetmealAndCheckGroup" parameterType="map">
+        insert into t_setmeal_checkgroup(setmeal_id,checkgroup_id) values(#{setmealId},#{checkgroupId});
+    </insert>
+
+    <!--检查项分页-->
+    <select id="selectByCondition" parameterType="string" resultType="com.itheima.pojo.Setmeal">
+        select * from t_setmeal
+        <if test="value !=null and value.length >0">
+            where code = #{value} or name = #{value} or helpCode = #{value}
+        </if>
+    </select>
+
+    <!-- 查询套餐列表 -->
+    <select id="findAll" resultType="com.itheima.pojo.Setmeal">
+        select * from t_setmeal
+    </select>
+
+    <!--查询套餐数据成功 findById-->
+    <!--<select id="findById" parameterType="int" resultType="com.itheima.pojo.Setmeal">
+        select * from t_setmeal where id = #{id}
+    </select>-->
+    <!--定义一个返回结果对象-->
+    <resultMap id="baseResultMap" type="com.itheima.pojo.Setmeal">
+        <!--
+           column：数据库中的字段  property：实体类中的属性
+           主键字段：一般使用<id>标签 其它都是<result>
+        -->
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="price" property="price"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+        <result column="img" property="img"/>
+    </resultMap>
+
+
+    <!--提取-->
+    <resultMap type="com.itheima.pojo.Setmeal" id="findByIdResultMap" extends="baseResultMap">
+        <!--关联查询检查组数据
+            property:实体类中的属性
+            javaType：实体类中的属性类型
+            ofType:查询检查组后返回集合中数据类型
+            column:根据套餐id查询检查组数据
+            select:发送查询语句 查询检查组数据
+        -->
+        <collection property="checkGroups" javaType="list" ofType="com.itheima.pojo.CheckGroup" column="id" select="com.itheima.dao.CheckGroupDao.findCheckGroupById"/>
+    </resultMap>
+
+    <select id="findById" parameterType="int" resultMap="findByIdResultMap">
+        select * from t_setmeal where id = #{id}
+    </select>
+
+
+    <!--查询套餐名称 以及套餐预约数量-->
+    <select id="setmealCount" resultType="map">
+        select ts.name,count(o.id) value from t_setmeal ts,t_order o where ts.id = o.setmeal_id group by ts.id
+    </select>
+
+    <!--运营数据统计-热门套餐数据查询-->
+    <select id="hotSetmeal" resultType="map">
+        select ts.name,count(o.id) setmeal_count,(count(o.id)/(select count(*) from t_order )) proportion,ts.remark FROM t_setmeal ts ,t_order o where ts.id = o.setmeal_id
+        group by ts.id order by setmeal_count desc limit 0,4
+    </select>
+
+
+</mapper>

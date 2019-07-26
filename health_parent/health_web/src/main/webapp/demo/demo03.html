@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> Dropdown 下拉菜单</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="el/index.css">
+    <script src="el/vue.js"></script>
+    <script src="el/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-dropdown >
+  <span class="el-dropdown-link">
+    下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+        <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>黄金糕</el-dropdown-item>
+            <el-dropdown-item>狮子头</el-dropdown-item>
+            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+            <el-dropdown-item disabled>双皮奶</el-dropdown-item>
+            <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+        </el-dropdown-menu>
+    </el-dropdown>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app'
+    })
+</script>
+</html>

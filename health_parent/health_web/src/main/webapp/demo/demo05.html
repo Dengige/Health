@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>table表格</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="el/index.css">
+    <script src="el/vue.js"></script>
+    <script src="el/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <template>
+        <!--基础表格-->
+        <el-table
+                :data="tableData"
+                style="width: 100%">
+            <el-table-column
+                    prop="date"
+                    label="日期"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="姓名"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="address"
+                    label="地址">
+            </el-table-column>
+        </el-table>
+        <!--分页el-pagination
+        size-change：每页显示的记录数
+        current-change:当前改变页码
+        current-page：当前第几页
+        page-sizes:下拉框
+        page-size:默认每页显示多少条数据
+        layout：布局
+        total:总记录数
+
+        小结：分页组件 只需要两个参数值 total总记录数  每页显示的数据tableData
+        -->
+        <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage4"
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size="10"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="100">
+        </el-pagination>
+    </template>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        methods: {
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            }
+        },
+        data() {
+            return {
+                currentPage4: 1,
+                tableData: [{
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1517 弄'
+                }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1519 弄'
+                }, {
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1516 弄'
+                }]
+            }
+        }
+    })
+</script>
+</html>
