@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>传智健康</title>
+    <meta name="description" content="传智健康">
+    <meta name="keywords" content="传智健康">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <script src="../plugins/echarts/echarts.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<body class="hold-transition skin-purple sidebar-mini">
+<div id="app">
+    <div class="login-container">
+        <div class="loginBox">
+            <form method="post" :model="formData" class="login-form" action="/login.do" label-position="left">
+                <div class="title-container">
+                    <div class="logoInfo clearfix">
+                        <em class="logo"></em>
+                    </div>
+                </div>
+                <div>
+                        <span class="svg-container svg-container_login">
+                          <span class="user"></span>
+                        </span>
+                    <input ref="usernames" v-model="formData.username" type="text" name="username" placeholder="请输入用户名" />
+                </div>
+                <div>
+                        <span class="svg-container svg-container_login">
+                          <span class="user"></span>
+                        </span>
+                    <input ref="password" v-model="formData.password" type="password" name="password" placeholder="请输入重置前密码" />
+                </div>
+                <div>
+                        <span class="svg-container">
+                          <span class="username"></span>
+                        </span>
+                    <input ref="dbpassword" v-model="formData.dbpassword" type="password" name="password" placeholder="请输入修改后密码"/>
+                </div>
+                <!--<input type="submit" style="width:100%;margin-bottom:30px;" value="修改"></input>-->
+                <div slot="footer" class="dialog-footer">
+                    <!--<el-button @click="dialogFormVisible = false">取消</el-button>-->
+                    <!--<input type="button" @click="password()" value="确认"></el-button>-->
+                    <el-button type="primary" @click="password()">确定</el-button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 引入组件库 -->
+<script src="../js/vue.js"></script>
+<script src="../plugins/elementui/index.js"></script>
+
+    <script>
+        var vue = new Vue({
+            el: '#app',
+            data:{
+                formData: {
+
+                },//表单数据
+            },
+            methods:{
+                password(){
+                    var usernames = this.$refs.usernames.value;//用户名
+                    var password = this.$refs.password.value;//用户密码
+                    var dbpassword = this.$refs.dbpassword.value;//用户修改后密码
+                    axios.post("/password/change.do",{usernames:usernames,
+                                                     password:password,
+                                                     dbpassword :dbpassword}).then(res=>{
+                        this.$message({
+                            message:res.data.message,
+                            type:res.data.flag?"success":"error"
+                        });
+                        if (res.data.flag){
+                            //如果为true,跳转到登录页面
+                            window.location.href ="/login.html";
+                        }
+                            //如果为false,刷新页面
+                        this.formData = {};
+                    })
+                }
+            }
+        })
+    </script>
+</html>
