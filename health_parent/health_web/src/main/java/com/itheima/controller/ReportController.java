@@ -7,7 +7,7 @@ import com.itheima.service.MemberSerivce;
 import com.itheima.service.ReportService;
 import com.itheima.service.SetmealService;
 import com.itheima.utils.DateUtils;
-import net.sf.jxls.transformer.XLSTransformer;
+//import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -206,32 +206,32 @@ public class ReportController {
      * @param request
      * @param response
      */
-    @RequestMapping(value = "/exportBusinessReport",method = RequestMethod.GET)
-    public void exportBusinessReport(HttpServletRequest request, HttpServletResponse response){
-        try {
-            Map<String,Object> rsMap = reportService.getBusinessReportData();
-            //获取模板路径
-            String filePath = request.getSession().getServletContext().getRealPath("template")+File.separator+"report_template.xlsx";
-            //1.得到Excel对象
-            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(new File(filePath)));
-
-            XLSTransformer transformer = new XLSTransformer();
-            transformer.transformWorkbook(xssfWorkbook, rsMap);
-
-            //3.以文件流形式 下载本地磁盘 通过response对象返回文件流
-            OutputStream outputStream = response.getOutputStream();
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");//excel文件
-            response.setHeader("content-Disposition", "attachment;filename=report.xlsx");//以文件附件形式下载 文件名是report.xlsx
-            xssfWorkbook.write(outputStream);
-
-            //4.关闭资源
-            outputStream.flush();
-            outputStream.close();
-            xssfWorkbook.close();
-            //return new Result(true, MessageConstant.GET_BUSINESS_REPORT_SUCCESS);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //return new Result(false, MessageConstant.GET_BUSINESS_REPORT_FAIL);
-        }
-    }
+//    @RequestMapping(value = "/exportBusinessReport",method = RequestMethod.GET)
+//    public void exportBusinessReport(HttpServletRequest request, HttpServletResponse response){
+//        try {
+//            Map<String,Object> rsMap = reportService.getBusinessReportData();
+//            //获取模板路径
+//            String filePath = request.getSession().getServletContext().getRealPath("template")+File.separator+"report_template.xlsx";
+//            //1.得到Excel对象
+//            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(new File(filePath)));
+//
+//            XLSTransformer transformer = new XLSTransformer();
+//            transformer.transformWorkbook(xssfWorkbook, rsMap);
+//
+//            //3.以文件流形式 下载本地磁盘 通过response对象返回文件流
+//            OutputStream outputStream = response.getOutputStream();
+//            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");//excel文件
+//            response.setHeader("content-Disposition", "attachment;filename=report.xlsx");//以文件附件形式下载 文件名是report.xlsx
+//            xssfWorkbook.write(outputStream);
+//
+//            //4.关闭资源
+//            outputStream.flush();
+//            outputStream.close();
+//            xssfWorkbook.close();
+//            //return new Result(true, MessageConstant.GET_BUSINESS_REPORT_SUCCESS);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            //return new Result(false, MessageConstant.GET_BUSINESS_REPORT_FAIL);
+//        }
+//    }
 }
